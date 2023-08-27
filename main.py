@@ -2,7 +2,8 @@ import math
 from tkinter import *
 
 ## CREDITS TO Dr. Angela Yu for this idea from her 100 days of python course.
-# ---------------------------- CONSTANTS ------------------------------- #
+
+
 PINK = "#e2979c"
 RED = "#e7305b"
 GREEN = "#9bdeac"
@@ -10,10 +11,10 @@ YELLOW = "#f7f5dd"
 FONT_NAME = "Courier New"
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
-LONG_BREAK_MIN = 20
+LONG_BREAK_MIN = 15
 image_path = "tomato2.png"
 time_intervals_completed = 0
-last_session = None
+previous_session = None
 fg = GREEN
 
 checkmark_list = []
@@ -48,7 +49,7 @@ def start_timer():
     global time_intervals_completed
     global is_loop_finished
     global timer
-    global last_session
+    global previous_session
     global checkmark_list
 
     # Cancel any running timers
@@ -56,7 +57,7 @@ def start_timer():
         window.after_cancel(timer)
 
     # If user finished early in their Work session, update the checkmark indicating completion.
-    if last_session == "Work" and is_loop_finished == 0:
+    if previous_session == "Work" and is_loop_finished == 0:
         add_checkmark()
         is_loop_finished = 1  # Reset indicator
 
@@ -72,13 +73,13 @@ def start_timer():
         label.config(text="Long Break", fg=PINK)
         count_down(seconds_to_work["long_break"])
         start_button.config(text="Start\nWork")
-        last_session = "Long Break"
+        previous_session = "Long Break"
         time_intervals_completed += 1
 
     # Update UI according to the "Work" session parameters.
     elif time_intervals_completed % 2 == 0:
         label.config(text="Work", fg=GREEN)
-        last_session = "Work"
+        previous_session = "Work"
         count_down(seconds_to_work["work"])
         start_button.config(text="Start\nBreak")
         time_intervals_completed += 1
@@ -88,7 +89,7 @@ def start_timer():
         label.config(text="Break", fg=RED)
         count_down(seconds_to_work["break"])
         start_button.config(text="Start\nWork")
-        last_session = "Break"
+        previous_session = "Break"
         time_intervals_completed += 1
 
 
@@ -139,7 +140,6 @@ def add_checkmark():
     checkmark.config(text=checkmarks_string)
 
 
-# ---------------------------- UI SETUP ------------------------------- #
 # Create a Tkinter Window
 window = Tk()
 window.title("Pomodoro Timer")
