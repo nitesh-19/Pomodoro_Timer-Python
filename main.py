@@ -28,6 +28,8 @@ def reset():
     time_intervals_completed = 0
     canvas.itemconfig(time_text, text=f"00:00")
     label.config(text="Pomodoro", fg=GREEN)
+    start_button.config(text="Start")
+
     checkmark = []
     print_checkmark.config(text="")
 
@@ -52,7 +54,7 @@ def start_timer():
     if time_intervals_completed % 7 == 0 and time_intervals_completed != 0:
         label.config(text="Long Break", fg=PINK)
         count_down(seconds_to_work["long_break"])
-        start_button.config(text="Start Work")
+        start_button.config(text="Start\nWork")
         last_session = "Long Break"
         time_intervals_completed += 1
 
@@ -60,14 +62,14 @@ def start_timer():
         label.config(text="Work", fg=GREEN)
         last_session = "Work"
         count_down(seconds_to_work["work"])
-        start_button.config(text="Start Break")
+        start_button.config(text="Start\nBreak")
 
         time_intervals_completed += 1
 
     elif time_intervals_completed % 2 == 1:
         label.config(text="Break", fg=RED)
         count_down(seconds_to_work["break"])
-        start_button.config(text="Start Work")
+        start_button.config(text="Start\nWork")
         last_session = "Break"
 
         time_intervals_completed += 1
@@ -118,10 +120,10 @@ tomato_img = PhotoImage(file=image_path)
 canvas.create_image(150, 250, image=tomato_img)
 time_text = canvas.create_text(140, 250, text="00:00", fill="black", font=("Calibri", 27, "bold"))
 label = Label(text="Pomodoro", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
-start_button = Button(master=window, text="Start", command=start_timer, font=("helvetica"), bd=0, bg=GREEN,
-                      fg=YELLOW)
-reset_button = Button(master=window, text="Reset", command=reset, font=("helvetica"), bd=0, bg=GREEN,
-                      fg=YELLOW)
+start_button = Button(master=window, text="Start", command=start_timer, font=("helvetica", 12, "bold"), bd=0, bg=GREEN,
+                      fg=YELLOW, padx=5, pady=5)
+reset_button = Button(master=window, text="Reset", command=reset, font=("helvetica", 12, "bold"), bd=0, bg=GREEN,
+                      fg=YELLOW, padx=5, pady=5)
 label.grid(row=0, column=1)
 canvas.grid(row=1, column=1)
 start_button.grid(row=2, column=0)
