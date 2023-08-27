@@ -1,5 +1,4 @@
 import math
-import time
 from tkinter import *
 
 # ---------------------------- CONSTANTS ------------------------------- #
@@ -15,29 +14,43 @@ image_path = "tomato.png"
 time_intervals_completed = 0
 work_sessions_completed = 0
 checkmark = []
+timer = None
 
 
 # ---------------------------- TIMER RESET ------------------------------- #
+def reset():
+    window.after_cancel(timer)
+    global time_intervals_completed
+    global work_sessions_completed
+    global checkmark
+    time_intervals_completed = 0
+    work_sessions_completed = 0
+    checkmark = []
+    canvas.itemconfig(time_text, text=f"00:00")
+    label.config(text="Pomodoro", fg=GREEN)
+    print_checkmark.config(text="")
 
-# ---------------------------- TIMER MECHANISM ------------------------------- # 
+
+# ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
     global time_intervals_completed
     global work_sessions_completed
+
     seconds_to_work = {"work": 2 * 1, "break": 2 * 1, "long_break": 10 * 1}
     if time_intervals_completed % 7 == 0 and time_intervals_completed != 0:
-        label.config(text="Long Break", fg="pink")
+        label.config(text="Long Break", fg=PINK)
         count_down(seconds_to_work["long_break"])
         start_button.config(text="Start Work")
         time_intervals_completed += 1
 
     elif time_intervals_completed % 2 == 0:
-        label.config(text="Work", fg="green")
+        label.config(text="Work", fg=GREEN)
         count_down(seconds_to_work["work"])
         start_button.config(text="Start Break")
         time_intervals_completed += 1
         work_sessions_completed += 1
     elif time_intervals_completed % 2 == 1:
-        label.config(text="Break", fg="red")
+        label.config(text="Break", fg=RED)
         count_down(seconds_to_work["break"])
         start_button.config(text="Start Work")
         time_intervals_completed += 1
@@ -47,6 +60,7 @@ def start_timer():
 
 
 def count_down(count):
+    global timer
     minutes_text = math.floor(count / 60)
     seconds_text = round(count % 60)
     if seconds_text == 0:
@@ -60,7 +74,7 @@ def count_down(count):
 
     canvas.itemconfig(time_text, text=f"{minutes_text}:{seconds_text}")
     if count > 0:
-        window.after(1000, count_down, count - 1)
+        timer = window.after(1000, count_down, count - 1)
     if count == 0 and time_intervals_completed % 2 != 0:
         add_checkmark()
 
@@ -86,7 +100,7 @@ canvas.create_image(100, 112, image=tomato_img)
 time_text = canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
 label = Label(text="Pomodoro", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
 start_button = Button(master=window, text="Start", command=start_timer)
-reset_button = Button(master=window, text="Reset")
+reset_button = Button(master=window, text="Reset", command=reset)
 label.grid(row=0, column=1)
 canvas.grid(row=1, column=1)
 start_button.grid(row=3, column=0)
