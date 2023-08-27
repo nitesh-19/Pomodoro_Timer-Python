@@ -25,19 +25,19 @@ def start_timer():
     global work_sessions_completed
     seconds_to_work = {"work": 2 * 1, "break": 2 * 1, "long_break": 10 * 1}
     if time_intervals_completed % 7 == 0 and time_intervals_completed != 0:
-        label.config(text="Long Break")
+        label.config(text="Long Break", fg="pink")
         count_down(seconds_to_work["long_break"])
         start_button.config(text="Start Work")
         time_intervals_completed += 1
 
     elif time_intervals_completed % 2 == 0:
-        label.config(text="Work")
+        label.config(text="Work", fg="green")
         count_down(seconds_to_work["work"])
         start_button.config(text="Start Break")
         time_intervals_completed += 1
         work_sessions_completed += 1
     elif time_intervals_completed % 2 == 1:
-        label.config(text="Break")
+        label.config(text="Break", fg="red")
         count_down(seconds_to_work["break"])
         start_button.config(text="Start Work")
         time_intervals_completed += 1
@@ -67,6 +67,8 @@ def count_down(count):
 
 def add_checkmark():
     global checkmark
+    if len(checkmark) == 4:
+        checkmark = []
     checkmark.append("🗸")
     checkmarks_string = "".join(checkmark)
     print_checkmark.config(text=checkmarks_string)
