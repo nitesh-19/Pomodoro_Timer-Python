@@ -12,20 +12,31 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 image_path = "tomato.png"
-sessions_completed = 0
+time_intervals_completed = 0
+work_sessions_completed = 0
 
 
 # ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
-    global sessions_completed
+    global time_intervals_completed
+    global work_sessions_completed
     seconds_to_work = {"work": 25 * 60, "break": 5 * 60, "long_break": 10 * 60}
-    if sessions_completed % 2 == 0:
+    if time_intervals_completed % 7 == 0 and time_intervals_completed != 0:
+        print("long break")
+        count_down(seconds_to_work["long_break"])
+        time_intervals_completed += 1
+
+    elif time_intervals_completed % 2 == 0:
+        print("work")
         count_down(seconds_to_work["work"])
-        sessions_completed += 1
-    elif sessions_completed % 2 == 1:
+        time_intervals_completed += 1
+        work_sessions_completed += 1
+    elif time_intervals_completed % 2 == 1:
+        print("break")
         count_down(seconds_to_work["break"])
+        time_intervals_completed += 1
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
@@ -58,7 +69,7 @@ tomato_img = PhotoImage(file=image_path)
 canvas.create_image(100, 112, image=tomato_img)
 time_text = canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
 label = Label(text="Timer", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
-checkmarks = ["🗸" for i in range(0, sessions_completed)]
+checkmarks = ["🗸" for i in range(0, work_sessions_completed)]
 checkmarks_string = "".join(checkmarks)
 print_checkmark = Label(text=checkmarks_string, bg=YELLOW, fg=fg, font=(FONT_NAME, 25, "bold"))
 start_button = Button(master=window, text="Start", command=start_timer)
