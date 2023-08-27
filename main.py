@@ -25,6 +25,16 @@ def start_timer():
 def count_down(count):
     minutes_text = math.floor(count / 60)
     seconds_text = round(count % 60)
+    if seconds_text == 0:
+        seconds_text = "00"
+    elif seconds_text < 10:
+        seconds_text = f"0{seconds_text}"
+
+    if minutes_text == 0:
+        minutes_text = "00"
+    elif minutes_text < 10:
+        minutes_text = f"0{minutes_text}"
+
     canvas.itemconfig(time_text, text=f"{minutes_text}:{seconds_text}")
     if count > 0:
         window.after(1000, count_down, count - 1)
