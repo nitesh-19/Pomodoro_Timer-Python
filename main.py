@@ -11,14 +11,20 @@ SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 image_path = "tomato.png"
 
-# ---------------------------- TIMER RESET ------------------------------- # 
+
+# ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+def count_down(count):
+    canvas.itemconfig(time_text, text=count)
+    if count > 0:
+        window.after(1000, count_down, count - 1)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
-
+count = 5
 window = Tk()
 window.title("Pomodoro Timer")
 window.config(padx=100, pady=50, bg=YELLOW)
@@ -26,8 +32,8 @@ fg = GREEN
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file=image_path)
 canvas.create_image(100, 112, image=tomato_img)
-canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
-
+time_text = canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
+count_down(count)
 label = Label(text="Timer", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
 sessions_completed = 2
 checkmarks = ["🗸" for i in range(0, sessions_completed)]
