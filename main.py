@@ -1,4 +1,6 @@
+import math
 from tkinter import *
+from math import *
 
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
@@ -15,10 +17,15 @@ image_path = "tomato.png"
 # ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
+def start_timer():
+    count_down(180)
 
-# ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
+
+# ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
-    canvas.itemconfig(time_text, text=count)
+    minutes_text = math.floor(count / 60)
+    seconds_text = round(count % 60)
+    canvas.itemconfig(time_text, text=f"{minutes_text}:{seconds_text}")
     if count > 0:
         window.after(1000, count_down, count - 1)
 
@@ -33,15 +40,13 @@ canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file=image_path)
 canvas.create_image(100, 112, image=tomato_img)
 time_text = canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
-count_down(count)
 label = Label(text="Timer", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
 sessions_completed = 2
 checkmarks = ["🗸" for i in range(0, sessions_completed)]
 checkmarks_string = "".join(checkmarks)
 print_checkmark = Label(text=checkmarks_string, bg=YELLOW, fg=fg, font=(FONT_NAME, 25, "bold"))
-start_button = Button(master=window, text="Start")
+start_button = Button(master=window, text="Start", command=start_timer)
 reset_button = Button(master=window, text="Reset")
-
 label.grid(row=0, column=1)
 canvas.grid(row=1, column=1)
 print_checkmark.grid(row=2, column=1)
