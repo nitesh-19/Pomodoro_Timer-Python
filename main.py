@@ -1,4 +1,5 @@
 import math
+import time
 from tkinter import *
 
 # ---------------------------- CONSTANTS ------------------------------- #
@@ -22,25 +23,29 @@ checkmark = []
 def start_timer():
     global time_intervals_completed
     global work_sessions_completed
-    seconds_to_work = {"work": 7 * 1, "break": 5 * 1, "long_break": 10 * 1}
+    seconds_to_work = {"work": 2 * 1, "break": 2 * 1, "long_break": 10 * 1}
     if time_intervals_completed % 7 == 0 and time_intervals_completed != 0:
-        print("long break")
+        label.config(text="Long Break")
         count_down(seconds_to_work["long_break"])
+        start_button.config(text="Start Work")
         time_intervals_completed += 1
 
     elif time_intervals_completed % 2 == 0:
-        print("work")
+        label.config(text="Work")
         count_down(seconds_to_work["work"])
-        print("break")
-        add_checkmark()
+        start_button.config(text="Start Break")
         time_intervals_completed += 1
         work_sessions_completed += 1
     elif time_intervals_completed % 2 == 1:
+        label.config(text="Break")
         count_down(seconds_to_work["break"])
+        start_button.config(text="Start Work")
         time_intervals_completed += 1
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+
+
 def count_down(count):
     minutes_text = math.floor(count / 60)
     seconds_text = round(count % 60)
@@ -56,6 +61,8 @@ def count_down(count):
     canvas.itemconfig(time_text, text=f"{minutes_text}:{seconds_text}")
     if count > 0:
         window.after(1000, count_down, count - 1)
+    if count == 0 and time_intervals_completed % 2 != 0:
+        add_checkmark()
 
 
 def add_checkmark():
@@ -63,6 +70,7 @@ def add_checkmark():
     checkmark.append("🗸")
     checkmarks_string = "".join(checkmark)
     print_checkmark.config(text=checkmarks_string)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -74,7 +82,7 @@ canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file=image_path)
 canvas.create_image(100, 112, image=tomato_img)
 time_text = canvas.create_text(100, 130, text="00:00", fill="black", font=(FONT_NAME, 35, "bold"))
-label = Label(text="Timer", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
+label = Label(text="Pomodoro", bg=YELLOW, fg=fg, font=(FONT_NAME, 30, "bold"))
 start_button = Button(master=window, text="Start", command=start_timer)
 reset_button = Button(master=window, text="Reset")
 label.grid(row=0, column=1)
